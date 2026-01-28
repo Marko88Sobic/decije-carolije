@@ -217,6 +217,11 @@
 <body>
     <div class="container">
         <header>
+            <div style="text-align: right; margin-bottom: 20px;">
+                <a href="index.html" style="background: rgba(255,255,255,0.3); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s; display: inline-block;">
+                    🏠 Početna
+                </a>
+            </div>
             <h1>🌟 Dečije Čarolije 🌟</h1>
             <p class="subtitle">Dnevni Izazovi i Avanture</p>
         </header>
@@ -225,19 +230,17 @@
             <div class="video-section">
                 <h2 style="color: #667eea; margin-bottom: 20px;">📺 Današnji Video Izazov</h2>
                 
-                <div class="video-container">
-                    <!-- STAVITE ID VAŠEG VIDEO KLIPA UMESTO VIDEO_ID -->
-                    <!-- Primer: ako je link https://www.youtube.com/watch?v=ABC123, onda stavite ABC123 -->
-                    <iframe 
-                        src="https://www.youtube.com/embed/VIDEO_ID" 
-                        allowfullscreen
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-                    </iframe>
+                <div class="video-container" id="videoContainer">
+                    <div style="background: #667eea; color: white; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 40px; text-align: center;">
+                        <div style="font-size: 3em; margin-bottom: 20px;">📺</div>
+                        <h3>Video još nije postavljen</h3>
+                        <p style="margin-top: 15px; opacity: 0.9;">Admin treba da postavi dnevni video!</p>
+                    </div>
                 </div>
 
                 <div class="challenge-card">
-                    <h3>🎯 Današnji Izazov:</h3>
-                    <p>Pogledaj video i uradi sledeće aktivnosti sa nama! Kada završiš, možeš da podeliš svoj rad u komentarima na YouTube-u. 🌈</p>
+                    <h3 id="challengeTitle">🎯 Današnji Izazov:</h3>
+                    <p id="challengeDescription">Pogledaj video i uradi sledeće aktivnosti sa nama! Kada završiš, možeš da podeliš svoj rad u komentarima na YouTube-u. 🌈</p>
                 </div>
 
                 <h3 style="color: #667eea; margin: 30px 0 15px 0;">📝 Zadaci za danas:</h3>
@@ -332,6 +335,16 @@
 
         // Učitavanje sačuvanih zadataka
         window.onload = function() {
+            // Učitaj video
+            loadVideo();
+            
+            // Učitaj zadatke
+            loadTasks();
+            
+            // Učitaj izazov
+            loadChallenge();
+            
+            // Učitaj completed tasks
             const completed = JSON.parse(localStorage.getItem('completedTasks') || '[]');
             const tasks = document.querySelectorAll('.challenge-list li');
             completed.forEach(index => {
@@ -339,6 +352,48 @@
                     tasks[index].classList.add('completed');
                 }
             });
+        }
+
+        function loadVideo() {
+            const videoId = localStorage.getItem('dailyVideoId');
+            const container = document.getElementById('videoContainer');
+            
+            if(videoId) {
+                container.innerHTML = `
+                    <iframe 
+                        src="https://www.youtube.com/embed/${videoId}" 
+                        allowfullscreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                    </iframe>
+                `;
+            }
+        }
+
+        function loadTasks() {
+            const tasks = JSON.parse(localStorage.getItem('dailyTasks') || '[]');
+            const taskList = document.getElementById('taskList');
+            
+            if(tasks.length > 0) {
+                taskList.innerHTML = '';
+                tasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.textContent = task;
+                    li.onclick = function() { toggleTask(this); };
+                    taskList.appendChild(li);
+                });
+            }
+        }
+
+        function loadChallenge() {
+            const title = localStorage.getItem('challengeTitle');
+            const description = localStorage.getItem('challengeDescription');
+            
+            if(title) {
+                document.getElementById('challengeTitle').textContent = '🎯 ' + title;
+            }
+            if(description) {
+                document.getElementById('challengeDescription').textContent = description;
+            }
         }
 
         function shareResults() {

@@ -624,6 +624,23 @@
             transform: scale(0.95);
         }
 
+        .home-btn-modal {
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .home-btn-modal:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -696,6 +713,11 @@
         </div>
 
         <header>
+            <div style="text-align: right; margin-bottom: 20px;">
+                <a href="index.html" style="background: rgba(255,255,255,0.3); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s; display: inline-block;">
+                    🏠 Početna
+                </a>
+            </div>
             <h1>🌟 Čarobna Učionica 🌟</h1>
             <p class="subtitle">Igraj, uči i razvijaj maštu!</p>
         </header>
@@ -745,6 +767,9 @@
     <div id="coloringModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeGame('coloring')">&times;</span>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <a href="index.html" class="home-btn-modal">🏠 Početna</a>
+            </div>
             <h2 style="text-align: center; color: #667eea;">🎨 Bojanka Piksela</h2>
             <div class="color-palette" id="colorPalette"></div>
             <div class="coloring-canvas" id="coloringCanvas"></div>
@@ -759,6 +784,9 @@
     <div id="memoryModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeGame('memory')">&times;</span>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <a href="index.html" class="home-btn-modal">🏠 Početna</a>
+            </div>
             <h2 style="text-align: center; color: #667eea;">🧠 Igra Memorije</h2>
             <div style="text-align: center; font-size: 1.3em; margin: 20px 0;">
                 Potezi: <span id="moves">0</span> | Parovi: <span id="pairs">0</span>/8
@@ -774,6 +802,9 @@
     <div id="storyModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeGame('story')">&times;</span>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <a href="index.html" class="home-btn-modal">🏠 Početna</a>
+            </div>
             <h2 style="text-align: center; color: #667eea;">📖 Izmisli Svoju Priču</h2>
             <div style="margin: 30px 0;">
                 <p style="font-size: 1.2em; margin-bottom: 15px;">Počni priču sa:</p>
@@ -795,6 +826,9 @@
     <div id="mathModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeGame('math')">&times;</span>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <a href="index.html" class="home-btn-modal">🏠 Početna</a>
+            </div>
             <h2 style="text-align: center; color: #667eea;">🔢 Matematičke Zagonetke</h2>
             <div style="text-align: center; margin: 30px 0;">
                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 20px; font-size: 2em; margin-bottom: 20px;">
