@@ -655,18 +655,18 @@
             <p>Izaberi svoj avatar i unesi svoje ime da počneš avanturu!</p>
             
             <div class="avatar-selector" id="avatarSelector">
-                <div class="avatar-option" onclick="selectAvatar('👦')">👦</div>
-                <div class="avatar-option" onclick="selectAvatar('👧')">👧</div>
-                <div class="avatar-option" onclick="selectAvatar('🧒')">🧒</div>
-                <div class="avatar-option" onclick="selectAvatar('👶')">👶</div>
-                <div class="avatar-option" onclick="selectAvatar('🐱')">🐱</div>
-                <div class="avatar-option" onclick="selectAvatar('🐶')">🐶</div>
-                <div class="avatar-option" onclick="selectAvatar('🐼')">🐼</div>
-                <div class="avatar-option" onclick="selectAvatar('🦊')">🦊</div>
-                <div class="avatar-option" onclick="selectAvatar('🦁')">🦁</div>
-                <div class="avatar-option" onclick="selectAvatar('🐯')">🐯</div>
-                <div class="avatar-option" onclick="selectAvatar('🐨')">🐨</div>
-                <div class="avatar-option" onclick="selectAvatar('🐻')">🐻</div>
+                <div class="avatar-option" onclick="selectAvatar('👦', this)">👦</div>
+                <div class="avatar-option" onclick="selectAvatar('👧', this)">👧</div>
+                <div class="avatar-option" onclick="selectAvatar('🧒', this)">🧒</div>
+                <div class="avatar-option" onclick="selectAvatar('👶', this)">👶</div>
+                <div class="avatar-option" onclick="selectAvatar('🐱', this)">🐱</div>
+                <div class="avatar-option" onclick="selectAvatar('🐶', this)">🐶</div>
+                <div class="avatar-option" onclick="selectAvatar('🐼', this)">🐼</div>
+                <div class="avatar-option" onclick="selectAvatar('🦊', this)">🦊</div>
+                <div class="avatar-option" onclick="selectAvatar('🦁', this)">🦁</div>
+                <div class="avatar-option" onclick="selectAvatar('🐯', this)">🐯</div>
+                <div class="avatar-option" onclick="selectAvatar('🐨', this)">🐨</div>
+                <div class="avatar-option" onclick="selectAvatar('🐻', this)">🐻</div>
             </div>
 
             <input type="text" 
@@ -846,12 +846,12 @@
         };
 
         // Izbor avatara
-        function selectAvatar(avatar) {
+        function selectAvatar(avatar, element) {
             selectedAvatar = avatar;
             document.querySelectorAll('.avatar-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
-            event.target.classList.add('selected');
+            element.classList.add('selected');
             checkCanStart();
         }
 
