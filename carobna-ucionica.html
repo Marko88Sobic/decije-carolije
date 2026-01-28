@@ -666,7 +666,7 @@
                    placeholder="Unesi svoje ime..."
                    maxlength="15">
             
-            <button class="start-btn" id="startBtn" disabled>
+            <button class="start-btn" id="startBtn" onclick="startGame()" disabled>
                 🚀 Započni Avanturu!
             </button>
         </div>
@@ -887,7 +887,10 @@
 
         // Početak igre
         function startGame() {
+            console.log('startGame pozvana!');
             const name = document.getElementById('userName').value.trim();
+            console.log('Ime:', name);
+            console.log('Avatar:', selectedAvatar);
             
             if(!name || !selectedAvatar) {
                 alert('Molim te izaberi avatar i unesi svoje ime! 😊');
@@ -902,14 +905,22 @@
                 gamesPlayed: 0
             };
 
+            console.log('currentUser:', currentUser);
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            console.log('Pozivam showMainApp...');
             showMainApp();
         }
 
         // Prikaz glavne aplikacije
         function showMainApp() {
+            console.log('showMainApp pozvana!');
+            console.log('loginScreen element:', document.getElementById('loginScreen'));
+            console.log('mainContainer element:', document.getElementById('mainContainer'));
+            
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('mainContainer').style.display = 'block';
+            
+            console.log('Login screen sakriven, main container prikazan');
             
             // Postavi user info
             document.getElementById('userAvatar').textContent = currentUser.avatar;
@@ -919,6 +930,8 @@
             document.getElementById('scoreDisplay').textContent = currentUser.score;
             
             updateStarsDisplay();
+            
+            console.log('User info postavljen!');
         }
 
         // Logout
