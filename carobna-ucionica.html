@@ -167,6 +167,7 @@
             border-color: #667eea;
             background: #e8ebff;
             transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
         }
 
         .name-input {
@@ -201,14 +202,15 @@
             margin-top: 20px;
         }
 
-        .start-btn:hover {
+        .start-btn:hover:not(:disabled) {
             transform: scale(1.05);
             box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
         }
 
         .start-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
+            background: #ccc;
         }
 
         /* PROFILE BAR */
@@ -655,18 +657,7 @@
             <p>Izaberi svoj avatar i unesi svoje ime da počneš avanturu!</p>
             
             <div class="avatar-selector" id="avatarSelector">
-                <div class="avatar-option" onclick="selectAvatar('👦', this)">👦</div>
-                <div class="avatar-option" onclick="selectAvatar('👧', this)">👧</div>
-                <div class="avatar-option" onclick="selectAvatar('🧒', this)">🧒</div>
-                <div class="avatar-option" onclick="selectAvatar('👶', this)">👶</div>
-                <div class="avatar-option" onclick="selectAvatar('🐱', this)">🐱</div>
-                <div class="avatar-option" onclick="selectAvatar('🐶', this)">🐶</div>
-                <div class="avatar-option" onclick="selectAvatar('🐼', this)">🐼</div>
-                <div class="avatar-option" onclick="selectAvatar('🦊', this)">🦊</div>
-                <div class="avatar-option" onclick="selectAvatar('🦁', this)">🦁</div>
-                <div class="avatar-option" onclick="selectAvatar('🐯', this)">🐯</div>
-                <div class="avatar-option" onclick="selectAvatar('🐨', this)">🐨</div>
-                <div class="avatar-option" onclick="selectAvatar('🐻', this)">🐻</div>
+                <!-- Avatari će biti dodati dinamički -->
             </div>
 
             <input type="text" 
@@ -675,7 +666,7 @@
                    placeholder="Unesi svoje ime..."
                    maxlength="15">
             
-            <button class="start-btn" id="startBtn" onclick="startGame()" disabled>
+            <button class="start-btn" id="startBtn" disabled>
                 🚀 Započni Avanturu!
             </button>
         </div>
@@ -835,29 +826,54 @@
         };
 
         let selectedAvatar = '';
+        const avatars = ['👦', '👧', '🧒', '👶', '🐱', '🐶', '🐼', '🦊', '🦁', '🐯', '🐨', '🐻'];
 
-        // Provera da li korisnik vec postoji
-        window.onload = function() {
+        // Inicijalizacija kada se stranica učita
+        document.addEventListener('DOMContentLoaded', function() {
+            // Kreiraj avatare
+            const avatarContainer = document.getElementById('avatarSelector');
+            avatars.forEach(avatar => {
+                const div = document.createElement('div');
+                div.className = 'avatar-option';
+                div.textContent = avatar;
+                div.onclick = function() {
+                    selectAvatar(avatar, this);
+                };
+                avatarContainer.appendChild(div);
+            });
+
+            // Event listener za ime
+            document.getElementById('userName').addEventListener('input', checkCanStart);
+            document.getElementById('userName').addEventListener('keypress', function(e) {
+                if(e.key === 'Enter' && !document.getElementById('startBtn').disabled) {
+                    startGame();
+                }
+            });
+
+            // Proveri da li korisnik vec postoji
             const savedUser = localStorage.getItem('currentUser');
             if(savedUser) {
                 currentUser = JSON.parse(savedUser);
                 showMainApp();
             }
-        };
+        });
 
         // Izbor avatara
         function selectAvatar(avatar, element) {
             selectedAvatar = avatar;
+            
+            // Ukloni selected sa svih
             document.querySelectorAll('.avatar-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
+            
+            // Dodaj selected na kliknuti
             element.classList.add('selected');
+            
             checkCanStart();
         }
 
         // Provera da li može da se klikne dugme
-        document.getElementById('userName').addEventListener('input', checkCanStart);
-
         function checkCanStart() {
             const name = document.getElementById('userName').value.trim();
             const btn = document.getElementById('startBtn');
@@ -913,7 +929,8 @@
             }
         }
 
-        // Ažuriranje skorafunction updateScore(points) {
+        // Ažuriranje skora
+        function updateScore(points) {
             currentUser.score += points;
             currentUser.stars = Math.floor(currentUser.score / 10);
             
@@ -1147,14 +1164,12 @@
         }
 
         // Enter za matematiku
-        document.addEventListener('DOMContentLoaded', function() {
-            const mathInput = document.getElementById('mathAnswer');
-            if(mathInput) {
-                mathInput.addEventListener('keypress', function(e) {
-                    if(e.key === 'Enter') checkMathAnswer();
-                });
-            }
-        });
+        const mathAnswerInput = document.getElementById('mathAnswer');
+        if(mathAnswerInput) {
+            mathAnswerInput.addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') checkMathAnswer();
+            });
+        }
     </script>
 </body>
 </html>
