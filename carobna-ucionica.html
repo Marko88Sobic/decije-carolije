@@ -82,6 +82,198 @@
             75% { transform: translateY(-30px) rotate(270deg); }
         }
 
+        /* LOGIN EKRAN */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .login-screen.hidden {
+            display: none;
+        }
+
+        .login-box {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-box h1 {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .login-box p {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .avatar-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .avatar-option {
+            font-size: 3em;
+            padding: 15px;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+
+        .avatar-option.selected {
+            border-color: #667eea;
+            background: #e8ebff;
+            transform: scale(1.15);
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-family: 'Fredoka', sans-serif;
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* PROFILE BAR */
+        .profile-bar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            font-size: 2.5em;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 15px;
+            border: 3px solid #667eea;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .logout-btn {
+            background: #FF6B9D;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #ff4081;
+            transform: scale(1.05);
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -277,11 +469,6 @@
             animation: fadeIn 0.3s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .modal-content {
             background: white;
             margin: 5% auto;
@@ -291,6 +478,8 @@
             max-width: 800px;
             position: relative;
             animation: scaleIn 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes scaleIn {
@@ -446,10 +635,52 @@
                 width: 95%;
                 padding: 20px;
             }
+
+            .profile-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .avatar-selector {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
     </style>
 </head>
 <body>
+    <!-- LOGIN EKRAN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <h1>🌟 Dobrodošao/la! 🌟</h1>
+            <p>Izaberi svoj avatar i unesi svoje ime da počneš avanturu!</p>
+            
+            <div class="avatar-selector" id="avatarSelector">
+                <div class="avatar-option" onclick="selectAvatar('👦')">👦</div>
+                <div class="avatar-option" onclick="selectAvatar('👧')">👧</div>
+                <div class="avatar-option" onclick="selectAvatar('🧒')">🧒</div>
+                <div class="avatar-option" onclick="selectAvatar('👶')">👶</div>
+                <div class="avatar-option" onclick="selectAvatar('🐱')">🐱</div>
+                <div class="avatar-option" onclick="selectAvatar('🐶')">🐶</div>
+                <div class="avatar-option" onclick="selectAvatar('🐼')">🐼</div>
+                <div class="avatar-option" onclick="selectAvatar('🦊')">🦊</div>
+                <div class="avatar-option" onclick="selectAvatar('🦁')">🦁</div>
+                <div class="avatar-option" onclick="selectAvatar('🐯')">🐯</div>
+                <div class="avatar-option" onclick="selectAvatar('🐨')">🐨</div>
+                <div class="avatar-option" onclick="selectAvatar('🐻')">🐻</div>
+            </div>
+
+            <input type="text" 
+                   id="userName" 
+                   class="name-input" 
+                   placeholder="Unesi svoje ime..."
+                   maxlength="15">
+            
+            <button class="start-btn" id="startBtn" onclick="startGame()" disabled>
+                🚀 Započni Avanturu!
+            </button>
+        </div>
+    </div>
+
     <div class="bg-shapes">
         <div class="shape"></div>
         <div class="shape"></div>
@@ -457,7 +688,22 @@
         <div class="shape"></div>
     </div>
 
-    <div class="container">
+    <div class="container" id="mainContainer" style="display: none;">
+        <!-- PROFILE BAR -->
+        <div class="profile-bar">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">👦</div>
+                <div class="user-details">
+                    <div class="user-name" id="displayName">Ime</div>
+                    <div class="user-stats">
+                        <span>⭐ <span id="userStars">0</span> zvezdica</span>
+                        <span>🎮 <span id="gamesPlayed">0</span> igara</span>
+                    </div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">🚪 Izađi</button>
+        </div>
+
         <header>
             <h1>🌟 Čarobna Učionica 🌟</h1>
             <p class="subtitle">Igraj, uči i razvijaj maštu!</p>
@@ -497,7 +743,7 @@
         <div class="youtube-section">
             <h2 style="color: #667eea; margin-bottom: 20px;">🎬 Poseti Dečije Čarolije na YouTube-u!</h2>
             <p style="font-size: 1.2em; margin-bottom: 20px;">Svaki dan nove čarolije, izazovi i avanture te čekaju! 🌈</p>
-            <a href="#" class="youtube-btn" id="youtubeLink" target="_blank">
+            <a href="https://www.youtube.com/@DecijeCarolije88" class="youtube-btn" target="_blank">
                 <span style="font-size: 1.5em;">▶️</span>
                 Dečije Čarolije - YouTube
             </a>
@@ -579,36 +825,124 @@
     </div>
 
     <script>
-        // Sistem bodovanja
-        let score = parseInt(localStorage.getItem('score') || '0');
-        let stars = Math.floor(score / 10);
-        
-        function updateScore(points) {
-            score += points;
-            localStorage.setItem('score', score);
-            document.getElementById('scoreDisplay').textContent = score;
+        // USER PROFILE SISTEM
+        let currentUser = {
+            name: '',
+            avatar: '',
+            score: 0,
+            stars: 0,
+            gamesPlayed: 0
+        };
+
+        let selectedAvatar = '';
+
+        // Provera da li korisnik vec postoji
+        window.onload = function() {
+            const savedUser = localStorage.getItem('currentUser');
+            if(savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+            }
+        };
+
+        // Izbor avatara
+        function selectAvatar(avatar) {
+            selectedAvatar = avatar;
+            document.querySelectorAll('.avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            checkCanStart();
+        }
+
+        // Provera da li može da se klikne dugme
+        document.getElementById('userName').addEventListener('input', checkCanStart);
+
+        function checkCanStart() {
+            const name = document.getElementById('userName').value.trim();
+            const btn = document.getElementById('startBtn');
             
-            stars = Math.floor(score / 10);
+            if(name.length > 0 && selectedAvatar) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
+
+        // Početak igre
+        function startGame() {
+            const name = document.getElementById('userName').value.trim();
+            
+            if(!name || !selectedAvatar) {
+                alert('Molim te izaberi avatar i unesi svoje ime! 😊');
+                return;
+            }
+
+            currentUser = {
+                name: name,
+                avatar: selectedAvatar,
+                score: 0,
+                stars: 0,
+                gamesPlayed: 0
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            showMainApp();
+        }
+
+        // Prikaz glavne aplikacije
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainContainer').style.display = 'block';
+            
+            // Postavi user info
+            document.getElementById('userAvatar').textContent = currentUser.avatar;
+            document.getElementById('displayName').textContent = currentUser.name;
+            document.getElementById('userStars').textContent = currentUser.stars;
+            document.getElementById('gamesPlayed').textContent = currentUser.gamesPlayed;
+            document.getElementById('scoreDisplay').textContent = currentUser.score;
+            
+            updateStarsDisplay();
+        }
+
+        // Logout
+        function logout() {
+            if(confirm('Da li si siguran da želiš da izađeš? Tvoji rezultati će biti sačuvani! 😊')) {
+                localStorage.removeItem('currentUser');
+                location.reload();
+            }
+        }
+
+        // Ažuriranje skorafunction updateScore(points) {
+            currentUser.score += points;
+            currentUser.stars = Math.floor(currentUser.score / 10);
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            document.getElementById('scoreDisplay').textContent = currentUser.score;
+            document.getElementById('userStars').textContent = currentUser.stars;
+            
+            updateStarsDisplay();
+        }
+
+        function updateStarsDisplay() {
             let starsHTML = '';
-            for(let i = 0; i < Math.min(stars, 10); i++) {
+            for(let i = 0; i < Math.min(currentUser.stars, 10); i++) {
                 starsHTML += '⭐';
             }
             document.getElementById('starsDisplay').textContent = starsHTML || '⭐';
         }
-        
-        document.getElementById('scoreDisplay').textContent = score;
-        let starsHTML = '';
-        for(let i = 0; i < Math.min(stars, 10); i++) {
-            starsHTML += '⭐';
-        }
-        document.getElementById('starsDisplay').textContent = starsHTML || '⭐';
 
-        // YouTube Link - Dečije Čarolije
-        document.getElementById('youtubeLink').href = 'https://www.youtube.com/@DecijeCarolije88';
+        function incrementGamesPlayed() {
+            currentUser.gamesPlayed++;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            document.getElementById('gamesPlayed').textContent = currentUser.gamesPlayed;
+        }
 
         // Otvaranje/zatvaranje igara
         function openGame(game) {
             document.getElementById(game + 'Modal').style.display = 'block';
+            incrementGamesPlayed();
             
             if(game === 'coloring') initColoring();
             if(game === 'memory') startMemoryGame();
@@ -664,7 +998,7 @@
 
         function saveDrawing() {
             updateScore(5);
-            alert('🎨 Sjajno! Tvoj crtež je sačuvan! (+5 poena)');
+            alert('🎨 Sjajno ' + currentUser.name + '! Tvoj crtež je sačuvan! (+5 poena)');
         }
 
         // IGRA MEMORIJE
@@ -725,7 +1059,7 @@
                 
                 if(matchedPairs === 8) {
                     setTimeout(() => {
-                        alert('🎉 Bravo! Pronašao si sve parove! (+10 bonus poena)');
+                        alert('🎉 Bravo ' + currentUser.name + '! Pronašao si sve parove! (+10 bonus poena)');
                         updateScore(10);
                     }, 500);
                 }
@@ -761,7 +1095,7 @@
             const story = document.getElementById('storyText').value;
             if(story.length > 50) {
                 updateScore(10);
-                alert('📖 Predivna priča! Sačuvali smo je! (+10 poena)');
+                alert('📖 Predivna priča, ' + currentUser.name + '! Sačuvali smo je! (+10 poena)');
             } else {
                 alert('Napiši još malo duži deo priče! 😊');
             }
@@ -793,7 +1127,7 @@
             const result = document.getElementById('mathResult');
             
             if(userAnswer === currentAnswer) {
-                result.textContent = '🎉 Tačno! Bravo!';
+                result.textContent = '🎉 Tačno! Bravo ' + currentUser.name + '!';
                 result.style.color = '#6BCF7F';
                 mathCorrect++;
                 document.getElementById('mathScore').textContent = mathCorrect;
