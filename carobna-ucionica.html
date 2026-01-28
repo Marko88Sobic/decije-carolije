@@ -828,6 +828,37 @@
         let selectedAvatar = '';
         const avatars = ['👦', '👧', '🧒', '👶', '🐱', '🐶', '🐼', '🦊', '🦁', '🐯', '🐨', '🐻'];
 
+        // Pomoćne funkcije za rad sa korisnicima
+        function getAllUsers() {
+            const users = localStorage.getItem('allUsers');
+            return users ? JSON.parse(users) : [];
+        }
+
+        function saveAllUsers(users) {
+            localStorage.setItem('allUsers', JSON.stringify(users));
+        }
+
+        function findUser(name, avatar) {
+            const users = getAllUsers();
+            return users.find(u => u.name === name && u.avatar === avatar);
+        }
+
+        function saveCurrentUser() {
+            const users = getAllUsers();
+            const index = users.findIndex(u => u.name === currentUser.name && u.avatar === currentUser.avatar);
+            
+            if(index >= 0) {
+                // Ažuriraj postojećeg korisnika
+                users[index] = currentUser;
+            } else {
+                // Dodaj novog korisnika
+                users.push(currentUser);
+            }
+            
+            saveAllUsers(users);
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
+
         // Inicijalizacija kada se stranica učita
         document.addEventListener('DOMContentLoaded', function() {
             // Kreiraj avatare
@@ -897,16 +928,28 @@
                 return;
             }
 
-            currentUser = {
-                name: name,
-                avatar: selectedAvatar,
-                score: 0,
-                stars: 0,
-                gamesPlayed: 0
-            };
+            // Proveri da li ovaj korisnik već postoji
+            const existingUser = findUser(name, selectedAvatar);
+            
+            if(existingUser) {
+                // Učitaj postojećeg korisnika
+                currentUser = existingUser;
+                console.log('Učitan postojeći korisnik:', currentUser);
+                alert('Dobrodošao nazad, ' + name + '! 🎉\nTvoji poeni: ' + currentUser.score);
+            } else {
+                // Kreiraj novog korisnika
+                currentUser = {
+                    name: name,
+                    avatar: selectedAvatar,
+                    score: 0,
+                    stars: 0,
+                    gamesPlayed: 0
+                };
+                console.log('Kreiran novi korisnik:', currentUser);
+                alert('Dobrodošao, ' + name + '! 🌟\nPočnimo avanturu!');
+            }
 
-            console.log('currentUser:', currentUser);
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            saveCurrentUser();
             console.log('Pozivam showMainApp...');
             showMainApp();
         }
@@ -936,7 +979,11 @@
 
         // Logout
         function logout() {
-            if(confirm('Da li si siguran da želiš da izađeš? Tvoji rezultati će biti sačuvani! 😊')) {
+            if(confirm('Da li si siguran da želiš da izađeš?\nTvoji rezultati će biti sačuvani! 😊')) {
+                // Sačuvaj trenutnog korisnika pre nego što izađeš
+                saveCurrentUser();
+                
+                // Obriši samo trenutnu sesiju, ne i podatke
                 localStorage.removeItem('currentUser');
                 location.reload();
             }
@@ -947,7 +994,7 @@
             currentUser.score += points;
             currentUser.stars = Math.floor(currentUser.score / 10);
             
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            saveCurrentUser();
             
             document.getElementById('scoreDisplay').textContent = currentUser.score;
             document.getElementById('userStars').textContent = currentUser.stars;
@@ -965,7 +1012,7 @@
 
         function incrementGamesPlayed() {
             currentUser.gamesPlayed++;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            saveCurrentUser();
             document.getElementById('gamesPlayed').textContent = currentUser.gamesPlayed;
         }
 
