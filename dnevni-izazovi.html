@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dečije Čarolije - Dnevni Izazovi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #FFD93D;
+            font-size: 1.3em;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .video-section {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .challenge-card {
+            background: linear-gradient(135deg, #FFD93D 0%, #FF8C42 100%);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .challenge-card h3 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .challenge-card p {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .activity-card h3 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .challenge-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .challenge-list li {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            font-size: 1.1em;
+        }
+
+        .challenge-list li::before {
+            content: "✨ ";
+            font-size: 1.2em;
+        }
+
+        .completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            border-left-color: #6BCF7F;
+        }
+
+        .completed::before {
+            content: "✅ ";
+        }
+
+        .timer {
+            background: rgba(255, 217, 61, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer h4 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .timer-display {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌟 Dečije Čarolije 🌟</h1>
+            <p class="subtitle">Dnevni Izazovi i Avanture</p>
+        </header>
+
+        <div class="main-content">
+            <div class="video-section">
+                <h2 style="color: #667eea; margin-bottom: 20px;">📺 Današnji Video Izazov</h2>
+                
+                <div class="video-container">
+                    <!-- STAVITE ID VAŠEG VIDEO KLIPA UMESTO VIDEO_ID -->
+                    <!-- Primer: ako je link https://www.youtube.com/watch?v=ABC123, onda stavite ABC123 -->
+                    <iframe 
+                        src="https://www.youtube.com/embed/VIDEO_ID" 
+                        allowfullscreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                    </iframe>
+                </div>
+
+                <div class="challenge-card">
+                    <h3>🎯 Današnji Izazov:</h3>
+                    <p>Pogledaj video i uradi sledeće aktivnosti sa nama! Kada završiš, možeš da podeliš svoj rad u komentarima na YouTube-u. 🌈</p>
+                </div>
+
+                <h3 style="color: #667eea; margin: 30px 0 15px 0;">📝 Zadaci za danas:</h3>
+                <ul class="challenge-list" id="taskList">
+                    <li onclick="toggleTask(this)">Nacrtaj svoj omiljeni lik iz priče</li>
+                    <li onclick="toggleTask(this)">Smisli nastavak priče</li>
+                    <li onclick="toggleTask(this)">Napravi kolaž od papira</li>
+                    <li onclick="toggleTask(this)">Uči pesmu iz videa</li>
+                </ul>
+
+                <button class="btn" onclick="shareResults()">Podeli Rezultate 🎉</button>
+            </div>
+
+            <div class="sidebar">
+                <div class="activity-card">
+                    <h3>🎮 Igraj Igrice</h3>
+                    <p>Vrati se na glavnu stranicu i igraj zabavne igrice!</p>
+                    <a href="carobna-ucionica.html" class="btn">Igraj Sada</a>
+                </div>
+
+                <div class="activity-card">
+                    <h3>📺 Poseti Kanal</h3>
+                    <p>Pogledaj sve naše čarolije i pretplati se!</p>
+                    <a href="https://www.youtube.com/@DecijeCarolije88" class="btn" target="_blank" style="background: #FF0000;">YouTube Kanal</a>
+                </div>
+
+                <div class="activity-card timer">
+                    <h4>⏰ Vreme do sledećeg videa:</h4>
+                    <div class="timer-display" id="countdown">--:--:--</div>
+                </div>
+
+                <div class="activity-card">
+                    <h3>🏆 Tvoji Bedževi</h3>
+                    <div style="font-size: 2em; text-align: center; margin: 15px 0;">
+                        🎨 🧠 📖 🔢
+                    </div>
+                    <p style="text-align: center; color: #666;">Osvoji nove bedževe igrajući igrice!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tajmer do ponoći (novi video)
+        function updateCountdown() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setHours(24, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown').textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Označavanje zadataka
+        function toggleTask(element) {
+            element.classList.toggle('completed');
+            
+            // Čuvanje u localStorage
+            const tasks = document.querySelectorAll('.challenge-list li');
+            const completed = [];
+            tasks.forEach((task, index) => {
+                if(task.classList.contains('completed')) {
+                    completed.push(index);
+                }
+            });
+            localStorage.setItem('completedTasks', JSON.stringify(completed));
+
+            // Provera da li su svi završeni
+            checkAllCompleted();
+        }
+
+        function checkAllCompleted() {
+            const tasks = document.querySelectorAll('.challenge-list li');
+            const allCompleted = Array.from(tasks).every(task => task.classList.contains('completed'));
+            
+            if(allCompleted) {
+                confetti();
+                setTimeout(() => {
+                    alert('🎉 Bravo! Završio si sve današnje zadatke! Odličan si! 🌟');
+                }, 500);
+            }
+        }
+
+        // Učitavanje sačuvanih zadataka
+        window.onload = function() {
+            const completed = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+            const tasks = document.querySelectorAll('.challenge-list li');
+            completed.forEach(index => {
+                if(tasks[index]) {
+                    tasks[index].classList.add('completed');
+                }
+            });
+        }
+
+        function shareResults() {
+            const tasks = document.querySelectorAll('.challenge-list li');
+            const completed = Array.from(tasks).filter(t => t.classList.contains('completed')).length;
+            
+            if(completed === 0) {
+                alert('Uradi bar jedan zadatak pre nego što podeliš rezultate! 😊');
+                return;
+            }
+            
+            const message = `Završio sam ${completed} od ${tasks.length} zadataka na Dečijim Čarolijama! 🎉`;
+            
+            if(confirm(message + '\n\nŽeliš da podeliš na YouTube komentarima?')) {
+                window.open('https://www.youtube.com/@DecijeCarolije88', '_blank');
+            }
+        }
+
+        // Konfeti efekat
+        function confetti() {
+            const count = 50;
+            const defaults = {
+                origin: { y: 0.7 }
+            };
+
+            function fire(particleRatio, opts) {
+                for(let i = 0; i < count * particleRatio; i++) {
+                    const emoji = ['🎉', '⭐', '🌈', '✨', '🎨'][Math.floor(Math.random() * 5)];
+                    const div = document.createElement('div');
+                    div.textContent = emoji;
+                    div.style.position = 'fixed';
+                    div.style.left = Math.random() * 100 + '%';
+                    div.style.top = '-50px';
+                    div.style.fontSize = '2em';
+                    div.style.zIndex = '9999';
+                    div.style.animation = 'fall 3s linear';
+                    document.body.appendChild(div);
+                    
+                    setTimeout(() => div.remove(), 3000);
+                }
+            }
+
+            fire(0.25);
+            setTimeout(() => fire(0.2), 200);
+            setTimeout(() => fire(0.35), 400);
+        }
+
+        // CSS animacija za konfeti
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

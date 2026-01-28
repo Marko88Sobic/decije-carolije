@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Čarobna Učionica - Igraj i Uči!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animirani oblici u pozadini */
+        .bg-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            background: #FFD93D;
+            border-radius: 50%;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            background: #6BCF7F;
+            border-radius: 20%;
+            top: 60%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            background: #FF6B9D;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            top: 30%;
+            left: 70%;
+            animation-delay: 4s;
+        }
+
+        .shape:nth-child(4) {
+            width: 70px;
+            height: 70px;
+            background: #4ECDC4;
+            transform: rotate(45deg);
+            top: 80%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(90deg); }
+            50% { transform: translateY(-60px) rotate(180deg); }
+            75% { transform: translateY(-30px) rotate(270deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 3.5em;
+            color: #fff;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #FFD93D;
+            font-size: 1.3em;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .stars-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            display: inline-block;
+            margin-left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .stars {
+            font-size: 2em;
+            color: #FFD93D;
+            text-shadow: 0 0 10px rgba(255, 217, 61, 0.8);
+        }
+
+        .score {
+            font-size: 1.5em;
+            color: #fff;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #FF6B9D);
+        }
+
+        .game-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .game-card:hover .game-icon {
+            animation: spin 0.5s ease;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .youtube-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .youtube-btn {
+            background: #FF0000;
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .youtube-btn:hover {
+            background: #CC0000;
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(255, 0, 0, 0.4);
+        }
+
+        /* Modal za igre */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            animation: scaleIn 0.3s;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close:hover {
+            color: #FF6B9D;
+            transform: rotate(90deg);
+        }
+
+        /* Igra bojanja */
+        .coloring-canvas {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin: 20px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pixel {
+            aspect-ratio: 1;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pixel:hover {
+            transform: scale(1.1);
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 50px;
+            height: 50px;
+            border: 3px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .color-btn:hover {
+            transform: scale(1.2);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .color-btn.active {
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        /* Igra memorije */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin: 30px auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .memory-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .memory-card.flipped {
+            background: white;
+        }
+
+        .memory-card.matched {
+            background: #6BCF7F;
+            pointer-events: none;
+        }
+
+        .game-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🌟 Čarobna Učionica 🌟</h1>
+            <p class="subtitle">Igraj, uči i razvijaj maštu!</p>
+        </header>
+
+        <div class="stars-container">
+            <div class="stars" id="starsDisplay">⭐⭐⭐</div>
+            <div class="score">Tvoji poeni: <span id="scoreDisplay">0</span></div>
+        </div>
+
+        <div class="games-grid">
+            <div class="game-card" onclick="openGame('coloring')">
+                <span class="game-icon">🎨</span>
+                <h2>Bojanka Piksela</h2>
+                <p>Oboji svoj piksel crtež! Iskoristi maštu i napravi prelepe kreacije.</p>
+            </div>
+
+            <div class="game-card" onclick="openGame('memory')">
+                <span class="game-icon">🧠</span>
+                <h2>Igra Memorije</h2>
+                <p>Pronađi parove emoji-ja! Vežbaj pamćenje i koncentraciju.</p>
+            </div>
+
+            <div class="game-card" onclick="openGame('story')">
+                <span class="game-icon">📖</span>
+                <h2>Izmisli Priču</h2>
+                <p>Napiši svoju čarobnu priču! Pusti maštu da te vodi.</p>
+            </div>
+
+            <div class="game-card" onclick="openGame('math')">
+                <span class="game-icon">🔢</span>
+                <h2>Matematičke Zagonetke</h2>
+                <p>Reši zabavne zadatke! Učenje može biti super zabavno.</p>
+            </div>
+        </div>
+
+        <div class="youtube-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🎬 Poseti Dečije Čarolije na YouTube-u!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Svaki dan nove čarolije, izazovi i avanture te čekaju! 🌈</p>
+            <a href="#" class="youtube-btn" id="youtubeLink" target="_blank">
+                <span style="font-size: 1.5em;">▶️</span>
+                Dečije Čarolije - YouTube
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal za Bojanku -->
+    <div id="coloringModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeGame('coloring')">&times;</span>
+            <h2 style="text-align: center; color: #667eea;">🎨 Bojanka Piksela</h2>
+            <div class="color-palette" id="colorPalette"></div>
+            <div class="coloring-canvas" id="coloringCanvas"></div>
+            <div class="game-controls">
+                <button class="btn" onclick="clearCanvas()">Obriši Sve</button>
+                <button class="btn" onclick="saveDrawing()">Sačuvaj Crtež</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal za Memoriju -->
+    <div id="memoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeGame('memory')">&times;</span>
+            <h2 style="text-align: center; color: #667eea;">🧠 Igra Memorije</h2>
+            <div style="text-align: center; font-size: 1.3em; margin: 20px 0;">
+                Potezi: <span id="moves">0</span> | Parovi: <span id="pairs">0</span>/8
+            </div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <div class="game-controls">
+                <button class="btn" onclick="startMemoryGame()">Nova Igra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal za Priču -->
+    <div id="storyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeGame('story')">&times;</span>
+            <h2 style="text-align: center; color: #667eea;">📖 Izmisli Svoju Priču</h2>
+            <div style="margin: 30px 0;">
+                <p style="font-size: 1.2em; margin-bottom: 15px;">Počni priču sa:</p>
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <p id="storyPrompt" style="font-size: 1.3em; font-weight: 600;"></p>
+                </div>
+                <textarea id="storyText" 
+                    style="width: 100%; min-height: 200px; padding: 20px; border: 2px solid #667eea; border-radius: 15px; font-size: 1.1em; font-family: 'Fredoka', sans-serif;"
+                    placeholder="Napiši svoju priču ovde..."></textarea>
+            </div>
+            <div class="game-controls">
+                <button class="btn" onclick="newStoryPrompt()">Novi Početak</button>
+                <button class="btn" onclick="saveStory()">Sačuvaj Priču</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal za Matematiku -->
+    <div id="mathModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeGame('math')">&times;</span>
+            <h2 style="text-align: center; color: #667eea;">🔢 Matematičke Zagonetke</h2>
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 20px; font-size: 2em; margin-bottom: 20px;">
+                    <span id="mathQuestion">5 + 3 = ?</span>
+                </div>
+                <input type="number" id="mathAnswer" 
+                    style="font-size: 2em; padding: 15px; text-align: center; border: 3px solid #667eea; border-radius: 15px; width: 150px;"
+                    placeholder="?">
+                <div style="margin-top: 20px;">
+                    <button class="btn" onclick="checkMathAnswer()">Proveri</button>
+                    <button class="btn" onclick="newMathQuestion()">Novi Zadatak</button>
+                </div>
+                <div id="mathResult" style="font-size: 1.5em; margin-top: 20px; font-weight: 700;"></div>
+            </div>
+            <div style="text-align: center; font-size: 1.2em; color: #667eea;">
+                Tačnih odgovora: <span id="mathScore">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sistem bodovanja
+        let score = parseInt(localStorage.getItem('score') || '0');
+        let stars = Math.floor(score / 10);
+        
+        function updateScore(points) {
+            score += points;
+            localStorage.setItem('score', score);
+            document.getElementById('scoreDisplay').textContent = score;
+            
+            stars = Math.floor(score / 10);
+            let starsHTML = '';
+            for(let i = 0; i < Math.min(stars, 10); i++) {
+                starsHTML += '⭐';
+            }
+            document.getElementById('starsDisplay').textContent = starsHTML || '⭐';
+        }
+        
+        document.getElementById('scoreDisplay').textContent = score;
+        let starsHTML = '';
+        for(let i = 0; i < Math.min(stars, 10); i++) {
+            starsHTML += '⭐';
+        }
+        document.getElementById('starsDisplay').textContent = starsHTML || '⭐';
+
+        // YouTube Link - Dečije Čarolije
+        document.getElementById('youtubeLink').href = 'https://www.youtube.com/@DecijeCarolije88';
+
+        // Otvaranje/zatvaranje igara
+        function openGame(game) {
+            document.getElementById(game + 'Modal').style.display = 'block';
+            
+            if(game === 'coloring') initColoring();
+            if(game === 'memory') startMemoryGame();
+            if(game === 'story') newStoryPrompt();
+            if(game === 'math') newMathQuestion();
+        }
+
+        function closeGame(game) {
+            document.getElementById(game + 'Modal').style.display = 'none';
+        }
+
+        // BOJANKA PIKSELA
+        let currentColor = '#FF6B9D';
+        const colors = ['#FF6B9D', '#667eea', '#FFD93D', '#6BCF7F', '#4ECDC4', '#FF8C42', '#A8E6CF', '#9D4EDD'];
+
+        function initColoring() {
+            const palette = document.getElementById('colorPalette');
+            const canvas = document.getElementById('coloringCanvas');
+            
+            palette.innerHTML = '';
+            colors.forEach((color, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'color-btn' + (index === 0 ? ' active' : '');
+                btn.style.background = color;
+                btn.onclick = () => selectColor(color, btn);
+                palette.appendChild(btn);
+            });
+
+            canvas.innerHTML = '';
+            for(let i = 0; i < 100; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                pixel.onclick = () => colorPixel(pixel);
+                canvas.appendChild(pixel);
+            }
+        }
+
+        function selectColor(color, btn) {
+            currentColor = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function colorPixel(pixel) {
+            pixel.style.background = currentColor;
+            pixel.style.transform = 'scale(1.2)';
+            setTimeout(() => pixel.style.transform = 'scale(1)', 200);
+        }
+
+        function clearCanvas() {
+            document.querySelectorAll('.pixel').forEach(p => p.style.background = '#f0f0f0');
+        }
+
+        function saveDrawing() {
+            updateScore(5);
+            alert('🎨 Sjajno! Tvoj crtež je sačuvan! (+5 poena)');
+        }
+
+        // IGRA MEMORIJE
+        const emojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'];
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+
+        function startMemoryGame() {
+            matchedPairs = 0;
+            moves = 0;
+            flippedCards = [];
+            
+            document.getElementById('moves').textContent = moves;
+            document.getElementById('pairs').textContent = matchedPairs;
+
+            memoryCards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+            
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            
+            memoryCards.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.emoji = emoji;
+                card.dataset.index = index;
+                card.textContent = '❓';
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if(flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            
+            card.classList.add('flipped');
+            card.textContent = card.dataset.emoji;
+            flippedCards.push(card);
+
+            if(flippedCards.length === 2) {
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                
+                setTimeout(checkMatch, 800);
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if(card1.dataset.emoji === card2.dataset.emoji) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                document.getElementById('pairs').textContent = matchedPairs;
+                updateScore(3);
+                
+                if(matchedPairs === 8) {
+                    setTimeout(() => {
+                        alert('🎉 Bravo! Pronašao si sve parove! (+10 bonus poena)');
+                        updateScore(10);
+                    }, 500);
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '❓';
+                card2.textContent = '❓';
+            }
+            
+            flippedCards = [];
+        }
+
+        // PRIČA
+        const storyPrompts = [
+            "Jednom davno, u dalekoj šumi, živeo je mali...",
+            "U gradu gde su auta mogla da lete, jedno dete je pronašlo...",
+            "Tajni prolaz u školskom ormaru vodio je do...",
+            "Robot koji je voleo da crta otkrio je da može...",
+            "Na planeti pune boja, životinje su mogle da govore i...",
+            "Čarobna knjiga u biblioteci otvorila se i iz nje je izašao...",
+            "U kući na drvetu živela je vila koja je...",
+            "Delfin koji je znao tajni jezik pronašao je mapu do..."
+        ];
+
+        function newStoryPrompt() {
+            const prompt = storyPrompts[Math.floor(Math.random() * storyPrompts.length)];
+            document.getElementById('storyPrompt').textContent = prompt;
+            document.getElementById('storyText').value = '';
+        }
+
+        function saveStory() {
+            const story = document.getElementById('storyText').value;
+            if(story.length > 50) {
+                updateScore(10);
+                alert('📖 Predivna priča! Sačuvali smo je! (+10 poena)');
+            } else {
+                alert('Napiši još malo duži deo priče! 😊');
+            }
+        }
+
+        // MATEMATIKA
+        let currentAnswer = 0;
+        let mathCorrect = 0;
+
+        function newMathQuestion() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const operations = ['+', '-', '×'];
+            const op = operations[Math.floor(Math.random() * operations.length)];
+            
+            let question = `${num1} ${op} ${num2} = ?`;
+            
+            if(op === '+') currentAnswer = num1 + num2;
+            if(op === '-') currentAnswer = num1 - num2;
+            if(op === '×') currentAnswer = num1 * num2;
+            
+            document.getElementById('mathQuestion').textContent = question;
+            document.getElementById('mathAnswer').value = '';
+            document.getElementById('mathResult').textContent = '';
+        }
+
+        function checkMathAnswer() {
+            const userAnswer = parseInt(document.getElementById('mathAnswer').value);
+            const result = document.getElementById('mathResult');
+            
+            if(userAnswer === currentAnswer) {
+                result.textContent = '🎉 Tačno! Bravo!';
+                result.style.color = '#6BCF7F';
+                mathCorrect++;
+                document.getElementById('mathScore').textContent = mathCorrect;
+                updateScore(2);
+                setTimeout(newMathQuestion, 1500);
+            } else {
+                result.textContent = '❌ Pokušaj ponovo!';
+                result.style.color = '#FF6B9D';
+            }
+        }
+
+        // Zatvori modal klikom van njega
+        window.onclick = function(event) {
+            if(event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Enter za matematiku
+        document.addEventListener('DOMContentLoaded', function() {
+            const mathInput = document.getElementById('mathAnswer');
+            if(mathInput) {
+                mathInput.addEventListener('keypress', function(e) {
+                    if(e.key === 'Enter') checkMathAnswer();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
