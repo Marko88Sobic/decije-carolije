@@ -6,91 +6,264 @@
     <title>Admin Panel - Dečije Čarolije</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Bubblegum+Sans&display=swap" rel="stylesheet">
     <style>
-        /* Postojeći CSS ostaje isti, dodajem samo za modal i logo */
-        #authModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 25px;
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
             text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+
+        h1 {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 3em;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            margin: 30px 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .modal-content input {
-            width: 80%;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 15px;
-            border: 3px solid #e0e0e0;
+        .admin-card h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .modal-content button {
-            padding: 15px 35px;
-            border-radius: 50px;
+        .form-group {
+            margin: 25px 0;
+        }
+
+        .form-group label {
+            display: block;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-family: 'Fredoka', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .example-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .example-box strong {
+            color: #667eea;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .task-item input {
+            flex: 1;
+            margin-right: 15px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            padding: 15px 35px;
             border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
             cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 5px;
         }
 
-        .logo {
-            max-width: 200px;
-            margin: 20px auto;
-            display: block;
-            border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
         }
 
-        .logo:hover {
-            transform: scale(1.1);
+        .btn-secondary {
+            background: #6BCF7F;
         }
 
-        /* Dodat za loading spinner */
-        .loading {
-            text-align: center;
+        .btn-danger {
+            background: #FF6B9D;
+        }
+
+        .btn-small {
+            padding: 8px 20px;
+            font-size: 1em;
+        }
+
+        .success-message {
+            background: #6BCF7F;
+            color: white;
             padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            display: none;
+            animation: slideDown 0.5s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .preview-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .preview-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .video-preview {
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .video-preview iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .current-data {
+            background: #e8ebff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .current-data h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .current-data p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .current-data strong {
             color: #667eea;
         }
 
         @media (max-width: 768px) {
-            .nav-buttons {
-                flex-direction: column;
+            h1 {
+                font-size: 2em;
+            }
+
+            .admin-card {
+                padding: 25px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- NOVO: Modal za autentifikaciju -->
-    <div id="authModal">
-        <div class="modal-content">
-            <h2>🔒 Unesite Lozinku za Admin</h2>
-            <input type="password" id="adminPassword" placeholder="Lozinka">
-            <button onclick="checkPassword()">Otključaj</button>
-            <p id="errorMsg" style="color: red; margin-top: 10px;"></p>
-        </div>
-    </div>
-
-    <div class="container" id="adminContent" style="display: none;">
+    <div class="container">
         <header>
             <h1>🔧 Admin Panel</h1>
             <p class="subtitle">Upravljaj videom i zadacima za decu</p>
-            <!-- NOVO: Logo YT kanala -->
-            <a href="https://www.youtube.com/channel/tvoj-kanal-id" target="_blank">
-                <img src="https://tvoj-yt-logo-url.com/logo.png" alt="Logo YT Kanala" class="logo">
-            </a>
         </header>
 
         <div class="nav-buttons">
@@ -151,7 +324,7 @@
 Smisli nastavak priče
 Napravi kolaž od papira
 Uči pesmu iz videa"></textarea>
-                <p class="help-text">💡 Svaki zadatak u novom redu (max 10 zadataka)</p>
+                <p class="help-text">💡 Svaki zadatak u novom redu</p>
             </div>
 
             <button class="btn" onclick="saveTasks()">💾 Sačuvaj Zadatke</button>
@@ -192,93 +365,70 @@ Uči pesmu iz videa"></textarea>
     </div>
 
     <script>
-        // NOVO: Lozinka za admin (promeni po potrebi)
-        const ADMIN_PASSWORD = 'admin123';
-
-        // Proveri lozinku
-        function checkPassword() {
-            const input = document.getElementById('adminPassword').value;
-            if (input === ADMIN_PASSWORD) {
-                document.getElementById('authModal').style.display = 'none';
-                document.getElementById('adminContent').style.display = 'block';
-                loadCurrentData(); // Učitaj podatke nakon otključavanja
-            } else {
-                document.getElementById('errorMsg').textContent = '❌ Pogrešna lozinka!';
-            }
-        }
-
-        // Enter key za lozinku
-        document.getElementById('adminPassword').addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                checkPassword();
-            }
-        });
-
         // Učitaj trenutne podatke
+        window.onload = function() {
+            loadCurrentData();
+            
+            // Real-time preview za video
+            document.getElementById('videoInput').addEventListener('input', function() {
+                updateVideoPreview();
+            });
+        };
+
         function loadCurrentData() {
-            try {
-                // NOVO: Dodaj loading
-                document.getElementById('currentTasksList').innerHTML = '<div class="loading">Učitavanje...</div>';
-
-                // Učitaj video
-                const videoId = localStorage.getItem('dailyVideoId');
-                if (videoId) {
-                    document.getElementById('videoInput').value = videoId;
-                    document.getElementById('currentVideoInfo').innerHTML = 
-                        `Video ID: <strong>${videoId}</strong><br>
-                        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">Otvori na YouTube-u</a>`;
-                    updateVideoPreview();
-                }
-
-                // Učitaj zadatke
-                const tasks = JSON.parse(localStorage.getItem('dailyTasks') || '[]');
-                if (tasks.length > 0) {
-                    document.getElementById('tasksInput').value = tasks.join('\n');
-                    
-                    const tasksList = document.getElementById('currentTasksList');
-                    tasksList.innerHTML = '';
-                    tasks.forEach(task => {
-                        const li = document.createElement('li');
-                        li.style.padding = '10px 0'; // Poboljšano formatiranje
-                        li.innerHTML = '✨ ' + task;
-                        tasksList.appendChild(li);
-                    });
-                } else {
-                    document.getElementById('currentTasksList').innerHTML = '<li style="padding: 5px 0;">Nema zadataka</li>';
-                }
-
-                // Učitaj izazov
-                const title = localStorage.getItem('challengeTitle');
-                const description = localStorage.getItem('challengeDescription');
-                if (title) document.getElementById('challengeTitle').value = title;
-                if (description) document.getElementById('challengeDescription').value = description;
-            } catch (error) {
-                alert('❌ Greška pri učitavanju podataka: ' + error.message);
+            // Učitaj video
+            const videoId = localStorage.getItem('dailyVideoId');
+            if(videoId) {
+                document.getElementById('videoInput').value = videoId;
+                document.getElementById('currentVideoInfo').innerHTML = 
+                    `Video ID: <strong>${videoId}</strong><br>
+                    <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">Otvori na YouTube-u</a>`;
+                updateVideoPreview();
             }
+
+            // Učitaj zadatke
+            const tasks = JSON.parse(localStorage.getItem('dailyTasks') || '[]');
+            if(tasks.length > 0) {
+                document.getElementById('tasksInput').value = tasks.join('\n');
+                
+                const tasksList = document.getElementById('currentTasksList');
+                tasksList.innerHTML = '';
+                tasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.style.padding = '5px 0';
+                    li.innerHTML = '✨ ' + task;
+                    tasksList.appendChild(li);
+                });
+            }
+
+            // Učitaj izazov
+            const title = localStorage.getItem('challengeTitle');
+            const description = localStorage.getItem('challengeDescription');
+            if(title) document.getElementById('challengeTitle').value = title;
+            if(description) document.getElementById('challengeDescription').value = description;
         }
 
-        // NOVO: Bolja validacija za video ID
         function extractVideoId(input) {
             input = input.trim();
             
-            // Ako je već samo ID (11 karaktera, alfanumerički sa - i _)
-            if (/^[a-zA-Z0-9_-]{11}$/.test(input)) {
+            // Ako je već samo ID (11 karaktera)
+            if(input.length === 11 && !input.includes('/') && !input.includes('=')) {
                 return input;
             }
             
             // YouTube standardni link: youtube.com/watch?v=ID
             let match = input.match(/[?&]v=([^&]+)/);
-            if (match && /^[a-zA-Z0-9_-]{11}$/.test(match[1])) return match[1];
+            if(match) return match[1];
             
             // YouTube kratki link: youtu.be/ID
             match = input.match(/youtu\.be\/([^?]+)/);
-            if (match && /^[a-zA-Z0-9_-]{11}$/.test(match[1])) return match[1];
+            if(match) return match[1];
             
             // Embed link: youtube.com/embed/ID
             match = input.match(/embed\/([^?]+)/);
-            if (match && /^[a-zA-Z0-9_-]{11}$/.test(match[1])) return match[1];
+            if(match) return match[1];
             
-            return null; // Vrati null ako nije validno
+            return input; // Vrati originalni input ako ne može da parsira
         }
 
         function updateVideoPreview() {
@@ -286,7 +436,7 @@ Uči pesmu iz videa"></textarea>
             const videoId = extractVideoId(input);
             const preview = document.getElementById('videoPreview');
             
-            if (videoId) {
+            if(videoId && videoId.length >= 10) {
                 preview.innerHTML = `
                     <iframe 
                         src="https://www.youtube.com/embed/${videoId}" 
@@ -303,8 +453,8 @@ Uči pesmu iz videa"></textarea>
             const input = document.getElementById('videoInput').value;
             const videoId = extractVideoId(input);
             
-            if (!videoId) {
-                alert('❌ Molim vas unesite ispravan YouTube link ili video ID (11 karaktera)!');
+            if(!videoId || videoId.length < 10) {
+                alert('❌ Molim vas unesite ispravan YouTube link ili video ID!');
                 return;
             }
             
@@ -317,12 +467,8 @@ Uči pesmu iz videa"></textarea>
             const tasksText = document.getElementById('tasksInput').value;
             const tasks = tasksText.split('\n').filter(task => task.trim() !== '');
             
-            if (tasks.length === 0) {
+            if(tasks.length === 0) {
                 alert('❌ Molim vas unesite bar jedan zadatak!');
-                return;
-            }
-            if (tasks.length > 10) { // NOVO: Limit
-                alert('❌ Maksimalno 10 zadataka!');
                 return;
             }
             
@@ -339,7 +485,7 @@ Uči pesmu iz videa"></textarea>
             const title = document.getElementById('challengeTitle').value;
             const description = document.getElementById('challengeDescription').value;
             
-            if (!title.trim()) {
+            if(!title.trim()) {
                 alert('❌ Molim vas unesite naslov izazova!');
                 return;
             }
@@ -359,8 +505,8 @@ Uči pesmu iz videa"></textarea>
         }
 
         function resetAllUserData() {
-            if (confirm('⚠️ Da li ste SIGURNI da želite da obrišete SVE korisnike i njihove rezultate?\n\nOvo NE MOŽE da se poništi!')) {
-                if (confirm('⚠️ POSLEDNJE UPOZORENJE!\n\nOvim ćete obrisati:\n- Sve profile dece\n- Sve poene i zvezdice\n- Sve statistike\n\nNastavi?')) {
+            if(confirm('⚠️ Da li ste SIGURNI da želite da obrišete SVE korisnike i njihove rezultate?\n\nOvo NE MOŽE da se poništi!')) {
+                if(confirm('⚠️ POSLEDNJE UPOZORENJE!\n\nOvim ćete obrisati:\n- Sve profile dece\n- Sve poene i zvezdice\n- Sve statistike\n\nNastavi?')) {
                     localStorage.removeItem('allUsers');
                     localStorage.removeItem('currentUser');
                     alert('✅ Svi korisnički podaci su obrisani!');
@@ -369,18 +515,11 @@ Uči pesmu iz videa"></textarea>
         }
 
         function resetDailyProgress() {
-            if (localStorage.getItem('completedTasks') && confirm('Da li želite da resetujete dnevni progres (čekirane zadatke)?')) {
+            if(confirm('Da li želite da resetujete dnevni progres (čekirane zadatke)?')) {
                 localStorage.removeItem('completedTasks');
                 alert('✅ Dnevni progres je resetovan!');
-            } else if (!localStorage.getItem('completedTasks')) {
-                alert('Nema dnevnih zadataka za resetovanje!');
             }
         }
-
-        // Real-time preview za video
-        document.getElementById('videoInput').addEventListener('input', function() {
-            updateVideoPreview();
-        });
     </script>
 </body>
 </html>
