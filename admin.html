@@ -83,6 +83,11 @@
             font-weight: 700;
             cursor: pointer;
             margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
         }
 
         .btn-secondary { background: #6BCF7F; }
@@ -97,6 +102,21 @@
             margin: 20px 0;
             text-align: center;
             display: none;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         /* PIN OVERLAY */
@@ -120,6 +140,11 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
 
+        #pinBox h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
         #pinBox input {
             width: 100%;
             padding: 15px;
@@ -128,12 +153,19 @@
             border: 3px solid #e0e0e0;
             text-align: center;
             margin-bottom: 20px;
+            font-family: 'Fredoka', sans-serif;
         }
 
         #pinError {
             color: #FF6B9D;
             display: none;
             margin-top: 10px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .admin-card { padding: 25px; }
         }
     </style>
 </head>
@@ -144,7 +176,7 @@
 <div id="pinOverlay">
     <div id="pinBox">
         <h2>🔐 Admin Pristup</h2>
-        <input type="password" id="pinInput" placeholder="Unesi PIN">
+        <input type="password" id="pinInput" placeholder="Unesi PIN" onkeypress="if(event.key==='Enter') checkPin()">
         <button class="btn" onclick="checkPin()">Uđi</button>
         <p id="pinError">❌ Pogrešan PIN</p>
     </div>
@@ -155,7 +187,11 @@
 <header>
     <h1>🔧 Admin Panel</h1>
     <p class="subtitle">Upravljanje sadržajem</p>
-    <button class="btn btn-danger btn-small" onclick="logoutAdmin()">🚪 Odjava</button>
+    <div class="nav-buttons">
+        <a href="index.html" class="btn btn-secondary btn-small">🏠 Početna</a>
+        <a href="dnevni-izazovi.html" class="btn btn-secondary btn-small">📺 Pregled</a>
+        <button class="btn btn-danger btn-small" onclick="logoutAdmin()">🚪 Odjava</button>
+    </div>
 </header>
 
 <div class="success-message" id="successMessage">
@@ -164,21 +200,42 @@
 
 <div class="admin-card">
     <h2>📺 Dnevni Video</h2>
-    <input type="text" id="videoInput" placeholder="YouTube link ili ID">
+    <div class="form-group">
+        <label>YouTube Link ili Video ID:</label>
+        <input type="text" id="videoInput" placeholder="Npr: https://www.youtube.com/watch?v=ABC123">
+        <p class="help-text">💡 Možete nalepiti ceo link ili samo ID videa</p>
+    </div>
     <button class="btn" onclick="saveVideo()">Sačuvaj Video</button>
 </div>
 
 <div class="admin-card">
     <h2>📝 Dnevni Zadaci</h2>
-    <textarea id="tasksInput" rows="5" placeholder="Jedan zadatak po liniji"></textarea>
+    <div class="form-group">
+        <label>Zadaci (jedan po liniji):</label>
+        <textarea id="tasksInput" rows="6" placeholder="Nacrtaj svoj omiljeni lik&#10;Smisli nastavak priče&#10;Napravi kolaž od papira"></textarea>
+        <p class="help-text">💡 Svaki zadatak u novom redu</p>
+    </div>
     <button class="btn" onclick="saveTasks()">Sačuvaj Zadatke</button>
 </div>
 
 <div class="admin-card">
     <h2>🎯 Naslov Izazova</h2>
-    <input type="text" id="challengeTitle" placeholder="Naslov">
-    <textarea id="challengeDescription" rows="3" placeholder="Opis"></textarea>
+    <div class="form-group">
+        <label>Naslov:</label>
+        <input type="text" id="challengeTitle" placeholder="Npr: Nacrtaj čarobnu šumu">
+    </div>
+    <div class="form-group">
+        <label>Opis:</label>
+        <textarea id="challengeDescription" rows="3" placeholder="Pogledaj video i uradi sledeće aktivnosti..."></textarea>
+    </div>
     <button class="btn" onclick="saveChallenge()">Sačuvaj</button>
+</div>
+
+<div class="admin-card">
+    <h2>⚠️ Reset Opcije</h2>
+    <p style="margin-bottom: 20px; color: #666;">Pažljivo koristite ove opcije!</p>
+    <button class="btn btn-danger" onclick="resetAllUserData()">🗑️ Obriši Sve Korisnike</button>
+    <button class="btn btn-danger" onclick="resetDailyProgress()">🔄 Resetuj Dnevni Progres</button>
 </div>
 
 </div>
@@ -193,19 +250,39 @@
             document.getElementById("pinOverlay").style.display = "none";
         } else {
             document.getElementById("pinError").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("pinError").style.display = "none";
+            }, 3000);
         }
     }
 
     function logoutAdmin() {
-        localStorage.removeItem("adminUnlocked");
-        location.reload();
+        if(confirm('Da li želite da se odjavite?')) {
+            localStorage.removeItem("adminUnlocked");
+            location.reload();
+        }
     }
 
     window.addEventListener("load", () => {
         if (localStorage.getItem("adminUnlocked") === "true") {
             document.getElementById("pinOverlay").style.display = "none";
+            loadCurrentData();
         }
     });
+
+    function loadCurrentData() {
+        const videoId = localStorage.getItem('dailyVideoId');
+        if(videoId) document.getElementById('videoInput').value = videoId;
+
+        const tasks = JSON.parse(localStorage.getItem('dailyTasks') || '[]');
+        if(tasks.length > 0) document.getElementById('tasksInput').value = tasks.join('\n');
+
+        const title = localStorage.getItem('challengeTitle');
+        if(title) document.getElementById('challengeTitle').value = title;
+
+        const description = localStorage.getItem('challengeDescription');
+        if(description) document.getElementById('challengeDescription').value = description;
+    }
 
     function showSuccess() {
         const msg = document.getElementById("successMessage");
@@ -213,21 +290,98 @@
         setTimeout(() => msg.style.display = "none", 3000);
     }
 
+    // 🔧 POPRAVLJENA FUNKCIJA - Izvlači ID iz bilo kog formata YouTube linka
+    function extractVideoId(input) {
+        input = input.trim();
+        
+        // Ako je već samo ID (11 karaktera)
+        if(input.length === 11 && !input.includes('/') && !input.includes('=')) {
+            return input;
+        }
+        
+        // YouTube standardni link: youtube.com/watch?v=ID
+        let match = input.match(/[?&]v=([^&]+)/);
+        if(match) return match[1];
+        
+        // YouTube kratki link: youtu.be/ID
+        match = input.match(/youtu\.be\/([^?]+)/);
+        if(match) return match[1];
+        
+        // Embed link: youtube.com/embed/ID
+        match = input.match(/embed\/([^?]+)/);
+        if(match) return match[1];
+        
+        return input;
+    }
+
     function saveVideo() {
-        localStorage.setItem("dailyVideoId", videoInput.value);
+        const input = document.getElementById("videoInput").value.trim();
+        
+        if(!input) {
+            alert('❌ Molim vas unesite YouTube link ili video ID!');
+            return;
+        }
+
+        const videoId = extractVideoId(input);
+        
+        if(!videoId || videoId.length < 10) {
+            alert('❌ Molim vas unesite ispravan YouTube link!\n\nPrimer: https://www.youtube.com/watch?v=ABC123');
+            return;
+        }
+        
+        localStorage.setItem("dailyVideoId", videoId);
         showSuccess();
+        
+        alert('✅ Video je sačuvan!\nVideo ID: ' + videoId);
     }
 
     function saveTasks() {
-        const tasks = tasksInput.value.split("\n").filter(t => t.trim());
+        const input = document.getElementById("tasksInput").value;
+        const tasks = input.split("\n").filter(t => t.trim());
+        
+        if(tasks.length === 0) {
+            alert('❌ Molim vas unesite bar jedan zadatak!');
+            return;
+        }
+        
         localStorage.setItem("dailyTasks", JSON.stringify(tasks));
+        localStorage.removeItem('completedTasks'); // Reset checked tasks
         showSuccess();
+        
+        alert('✅ Sačuvano ' + tasks.length + ' zadataka!');
     }
 
     function saveChallenge() {
-        localStorage.setItem("challengeTitle", challengeTitle.value);
-        localStorage.setItem("challengeDescription", challengeDescription.value);
+        const title = document.getElementById("challengeTitle").value.trim();
+        const description = document.getElementById("challengeDescription").value.trim();
+        
+        if(!title) {
+            alert('❌ Molim vas unesite naslov izazova!');
+            return;
+        }
+        
+        localStorage.setItem("challengeTitle", title);
+        localStorage.setItem("challengeDescription", description || 'Pogledaj video i uradi sledeće aktivnosti sa nama!');
         showSuccess();
+        
+        alert('✅ Naslov i opis su sačuvani!');
+    }
+
+    function resetAllUserData() {
+        if(confirm('⚠️ Da li ste SIGURNI da želite da obrišete SVE korisnike?\n\nOvo NE MOŽE da se poništi!')) {
+            if(confirm('⚠️ POSLEDNJE UPOZORENJE!\n\nOvim ćete obrisati sve profile dece i njihove rezultate.\n\nNastavi?')) {
+                localStorage.removeItem('allUsers');
+                localStorage.removeItem('currentUser');
+                alert('✅ Svi korisnički podaci su obrisani!');
+            }
+        }
+    }
+
+    function resetDailyProgress() {
+        if(confirm('Da li želite da resetujete dnevni progres (čekirane zadatke)?')) {
+            localStorage.removeItem('completedTasks');
+            alert('✅ Dnevni progres je resetovan!');
+        }
     }
 </script>
 
